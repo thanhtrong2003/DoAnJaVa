@@ -3,21 +3,17 @@ import { GET_ALL } from "../api/apiService";
 import imgus from '../assets/images/logo.png';
 import { useNavigate } from "react-router-dom";
 import SearchCategoryResults from "./SearchCategoryResults";
+import { useCart } from "./CartContext";
 
 function Header() {
     const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
-    const [cartItems, setCartItems] = useState([]);
+    const { cartState } = useCart();
     const navigate = useNavigate();
 
     useEffect(() => {
         GET_ALL(`categories`).then((item) => setCategories(item.data));
-    }, []);
-
-    useEffect(() => {
-        const initialCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-        setCartItems(initialCartItems);
     }, []);
 
     const handleSearch = () => {
@@ -25,22 +21,8 @@ function Header() {
         setSearchResults(results);
     };
 
-    const getTotalQuantity = () => {
-        // Kiểm tra xem cartItems có tồn tại và có phần tử không
-        if (cartItems && cartItems.length > 0) {
-          // Sử dụng reduce để tính tổng quantity của tất cả các sản phẩm trong giỏ hàng
-          return cartItems.reduce((total, item) => {
-            // Kiểm tra xem item có tồn tại và có thuộc tính quantity không
-            if (item && item.quantity) {
-              return total + item.quantity;
-            }
-            return total;
-          }, 0);
-        }
-      
-        return 0; // Trả về 0 nếu không có sản phẩm trong giỏ hàng
-      };
-      
+    //soluong
+
     return (
         <header className="section-header">
             <section className="header-main border-bottom">
@@ -128,7 +110,7 @@ function Header() {
                                     <a href="http://localhost:3000/shopping-cart" className="widget-view">
                                         <div className="icon-area">
                                             <i className="fa fa-shopping-cart"></i>
-                                            <span className="notify">{getTotalQuantity()}</span>
+                                            <span className="notify">{cartState.totalQuantity}</span>
                                         </div>
                                         <small className="text"> Cart </small>
                                     </a>

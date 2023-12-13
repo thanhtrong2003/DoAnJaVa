@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { GET_ID } from "../../api/apiService";
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
+import { useCart } from "../../layouts/CartContext";
 const cardTextStyle = {
     maxWidth: "80%",
 };
@@ -17,7 +18,7 @@ const Content = ({ onAddToCart, setCartItems, cartItems }) => {
      // Use useNavigate instead of useHistory
     const queryParams = new URLSearchParams(location.search);
     const productId = queryParams.get("productId");
-  
+    const { addToCart } = useCart(); 
     const [quantity, setQuantity] = useState(1);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
@@ -68,7 +69,7 @@ const Content = ({ onAddToCart, setCartItems, cartItems }) => {
             setCartItems(updatedCartItems);
             localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
         }
-        
+        addToCart(product);
         setShowSuccessMessage(true);
         setQuantity(1);  // Đặt lại giá trị quantity về 1 sau khi thêm vào giỏ hàng
     };
