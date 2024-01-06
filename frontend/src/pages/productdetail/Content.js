@@ -42,38 +42,36 @@ const Content = ({ onAddToCart, setCartItems, cartItems }) => {
       
     }, [productId]);
   
+    //xử lí thêm giỏ hàng
     const handleAddToCart = () => {
         const existingItemIndex = cartItems ? cartItems.findIndex(item => item && item.id === product.id) : -1;
-
+      
         if (existingItemIndex !== -1) {
-            // Sử dụng giá trị mới của quantity từ hàm setState
-            const updatedQuantity = cartItems[existingItemIndex].quantity + quantity;
-        
-            // Cập nhật quantity của sản phẩm trong giỏ hàng
-            const updatedCartItems = [...cartItems];
-            updatedCartItems[existingItemIndex].quantity = updatedQuantity;
-        
-            setCartItems(updatedCartItems);
-            localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+          // Sản phẩm đã tồn tại trong giỏ hàng
+          const updatedQuantity = cartItems[existingItemIndex].quantity + quantity;
+          const updatedCartItems = [...cartItems];
+          updatedCartItems[existingItemIndex].quantity = updatedQuantity;
+          setCartItems(updatedCartItems);
+          localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+          // Không thêm mới sản phẩm vào giỏ hàng, chỉ cập nhật số lượng
         } else {
-            const cartItem = {
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                quantity: quantity,
-                thumbnail: product.thumbnail,
-            };
-        
-            // Cập nhật quantity của sản phẩm trong giỏ hàng khi thêm mới
-            const updatedCartItems = [...cartItems, cartItem];
-            setCartItems(updatedCartItems);
-            localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+          // Sản phẩm chưa tồn tại trong giỏ hàng
+          const cartItem = {
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            quantity: quantity,
+            thumbnail: product.thumbnail,
+          };
+          const updatedCartItems = [...cartItems, cartItem];
+          setCartItems(updatedCartItems);
+          localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+          addToCart(product); // Thêm mới sản phẩm vào giỏ hàng
+          setShowSuccessMessage(true);
+          setQuantity(1);
         }
-        addToCart(product);
-        setShowSuccessMessage(true);
-        setQuantity(1);  // Đặt lại giá trị quantity về 1 sau khi thêm vào giỏ hàng
-    };
-
+      };
+      
     
     return (
         <section>
@@ -166,12 +164,7 @@ const Content = ({ onAddToCart, setCartItems, cartItems }) => {
                                 <div class="form-row mt-4">
                                   
                                     <div class="form-group col-md">
-                                    
-                                        <input  class="btn  btn-info "
-                                        type="number" 
-                                        value={quantity} 
-                                        onChange={(e) => setQuantity(e.target.value)} 
-                                    />
+                                    <button  class="fas fa-shopping-cart btn  btn-info"  onClick={handleAddToCart}>Mua ngay</button>
                                     <button  class="fas fa-shopping-cart btn  btn-info"  onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
                                     </div>
                                 </div>

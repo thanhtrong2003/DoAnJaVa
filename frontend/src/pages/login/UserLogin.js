@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
 
-const UserLogin = () => {
+const UserLogin = ({ setLoggedIn }) => {
     const [user, setUser] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -11,13 +12,34 @@ const UserLogin = () => {
         try {
             const response = await axios.post('http://localhost:8080/api/users/login', user);
             console.log('Login successful:', response.data);
-            // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
+            // Set the login status to true
+            setLoggedIn(true);
+            // Redirect to the home page after successful login
             navigate('/');
         } catch (error) {
             console.error('Login failed:', error.response);
             setError('Tên đăng nhập hoặc mật khẩu không chính xác. Hãy thử lại.');
         }
     };
+
+    const responseGoogle = async (response) => {
+        try {
+            console.log('Google login response:', response);
+            // Send the Google token to your server for verification
+            const googleResponse = await axios.post('http://localhost:8080/api/users/login/google', {
+                googleToken: response.tokenId,
+            });
+            console.log('Server response:', googleResponse.data);
+            // Set the login status to true
+            setLoggedIn(true);
+            // Redirect to the home page after successful Google login
+            navigate('/');
+        } catch (error) {
+            console.error('Google login failed:', error.response);
+            setError('Đăng nhập bằng Google thất bại. Hãy thử lại.');
+        }
+    };
+
 
     return (
         <div className="container mt-5">
@@ -49,6 +71,16 @@ const UserLogin = () => {
                                 <button type="button" className="btn btn-primary btn-block" onClick={handleLogin}>
                                     Đăng Nhập
                                 </button>
+                                <div className="mt-3 text-center">
+                                    <p>hoặc</p>
+                                    <GoogleLogin
+                                        clientId="810882291695-tjjpk133phohjsorsukgupuptbuhmp4k.apps.googleusercontent.com"
+                                        buttonText="Đăng nhập với Google"
+                                        onSuccess={responseGoogle}
+                                        onFailure={responseGoogle}
+                                        cookiePolicy={'single_host_origin'}
+                                    />
+                                </div>
                             </form>
                         </div>
                     </div>

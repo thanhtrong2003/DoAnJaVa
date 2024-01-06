@@ -1,0 +1,109 @@
+/* Add this CSS to your stylesheet */
+
+/* Header Section */
+.section-header {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-main {
+  padding: 10px 0;
+}
+
+/* Brand Logo */
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Search Form */
+.search-header {
+  position: relative;
+}
+
+.input-group {
+  width: 100%;
+}
+
+.form-control {
+  border-radius: 5px 0 0 5px;
+}
+
+.btn-info {
+  border-radius: 0 5px 5px 0;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Widgets Section */
+.widgets-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.widget-view {
+  text-decoration: none;
+  margin-right: 20px;
+  position: relative;
+  color: #333;
+  cursor: pointer;
+}
+
+.icon-area {
+  position: relative;
+  display: inline-block;
+}
+
+.notify {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #f00;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 10px;
+}
+
+/* Navigation Bar */
+.navbar {
+  padding: 0;
+}
+
+.navbar-nav {
+  flex-wrap: wrap;
+  padding-left: 15px;
+}
+
+.nav-item {
+  margin-right: 15px;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #007bff;
+}

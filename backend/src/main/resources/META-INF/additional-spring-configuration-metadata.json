@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "spring.social.google.redirect-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.social.google.redirect-uri'"
+  },
+  {
+    "name": "spring.social.google.appId",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.social.google.appId'"
+  },
+  {
+    "name": "spring.social.google.appSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.social.google.appSecret'"
+  }
+]}

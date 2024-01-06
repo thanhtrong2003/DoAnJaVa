@@ -42,6 +42,8 @@ public class UserServiceImpl implements UserService {
         existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
         existingUser.setFullname(user.getFullname());
+           existingUser.setEmail(user.getEmail());
+        existingUser.setPhoneNumber(user.getPhoneNumber());
         existingUser.setToken(user.getToken());
         existingUser.setOrders(user.getOrders());
 
@@ -53,9 +55,10 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }
+    
     @Override
     public User registerUser(UserDto userDto) {
-        User newUser = new User(userDto.getFullname(), userDto.getUsername(), userDto.getPassword());
+        User newUser = new User(userDto.getFullname(), userDto.getUsername(), userDto.getPassword() ,userDto.getEmail() ,userDto.getPhoneNumber() );
         return userRepository.save(newUser);
     }
 
@@ -64,5 +67,6 @@ public class UserServiceImpl implements UserService {
         User userInDb = userRepository.findByUsername(userDto.getUsername());
         return userInDb != null && userInDb.getPassword().equals(userDto.getPassword());
     }
+    
  
 }

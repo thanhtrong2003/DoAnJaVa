@@ -12,7 +12,9 @@ export const listUser = (props) =>
             <TextField source="fullname" />
             <TextField source="password" />
             <TextField source="username" />
-
+            <TextField source="email" />
+            <TextField source="phoneNumber" />
+            <TextField source="role.name" />
 
             <EditButton />
         </Datagrid>
@@ -25,7 +27,8 @@ export const editUser = (props) =>
         <TextInput source="fullname" />
             <TextInput source="password" />
             <TextInput source="username" />
-
+            <TextInput source="email" />
+            <TextInput source="phoneNumber" />
             
             <ReferenceInput label="Role" 
         source="role.id"
@@ -43,7 +46,8 @@ export const createUser = (props) =>
         <TextInput source="fullname" />
         <TextInput source="password" />
         <TextInput source="username" />
- 
+        <TextInput source="email" />
+        <TextInput source="phoneNumber" />
             <ReferenceInput label="Role" 
         source="role.id"
         reference="roles">

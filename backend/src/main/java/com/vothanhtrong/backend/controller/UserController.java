@@ -69,9 +69,9 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody UserDto userDto) {
         User registeredUser = userService.registerUser(userDto);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+        return ResponseEntity.ok(registeredUser);
     }
-
+    
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody UserDto userDto) {
         if (userService.loginUser(userDto)) {
@@ -81,4 +81,6 @@ public class UserController {
         }
     }
 
+
+    
 }

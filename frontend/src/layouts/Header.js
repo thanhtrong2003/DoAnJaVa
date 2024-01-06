@@ -2,24 +2,71 @@ import React, { useState, useEffect } from "react";
 import { GET_ALL } from "../api/apiService";
 import imgus from '../assets/images/logo.png';
 import { useNavigate } from "react-router-dom";
-import SearchCategoryResults from "./SearchCategoryResults";
+import SearchResults from "./SearchResults";
 import { useCart } from "./CartContext";
+import axios from "axios";
 
-function Header() {
+function Header({ isLoggedIn }) {
     const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const { cartState } = useCart();
     const navigate = useNavigate();
+	const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         GET_ALL(`categories`).then((item) => setCategories(item.data));
     }, []);
 
-    const handleSearch = () => {
-        const results = categories.filter(category => category.name.toLowerCase().includes(searchQuery.toLowerCase()));
-        setSearchResults(results);
-    };
+
+	const handleSearchChange = async (event) => {
+		try {
+		  setSearchQuery(event.target.value);
+		  if (!event.target.value.trim()) {
+			setSearchResults([]);
+			setDropdownOpen(false);
+		  } else {
+			// Reset currentPage to 1 when a new search query is entered
+			const nextPage = 1;
+	  
+			const productResponse = await axios.get('http://localhost:8080/api/products', {
+			  params: {
+				page: nextPage -1,
+				size: 10,
+				title: event.target.value,
+			  },
+			});
+			const products = productResponse.data;
+			setSearchResults(products.filter((item) => item.title?.toLowerCase().includes(event.target.value.toLowerCase())));
+			setDropdownOpen(true);
+		  }
+		} catch (error) {
+		  console.error('Error during search:', error);
+		}
+	  };
+
+	const handleLoadMore = async () => {
+		try {
+		  const nextPage = currentPage + 1;
+	  
+		  const productResponse = await axios.get('http://localhost:8080/api/products', {
+			params: {
+			  page: nextPage-1,
+			  size: 10,
+			  title: searchQuery,
+			},
+		  });
+	  
+		  const newProducts = productResponse.data;
+	  
+		  setSearchResults((prevResults) => [...prevResults, ...newProducts]);
+		  setCurrentPage(nextPage);
+		} catch (error) {
+		  console.error('Error loading more:', error);
+		}
+	  };
+	  
 
     //soluong
 
@@ -33,40 +80,44 @@ function Header() {
                                 <img className="logo" src={imgus} />
                             </a>
                         </div>
-                        <div className="col-xl-6 col-lg-5 col-md-6">
-                            <form
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    handleSearch();
-                                }}
-                                className="search-header btn-info"
-                            >
-                                <div className="input-group w-100">
-                                    <select className="custom-select border-right" name="category_name">
-                                        <option value="">All type</option>
-                                        {categories.map((category) => (
-                                            <option key={category.id} value={category.name}>
-                                                {category.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Search"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                    <div className="input-group-append">
-                                        <button className="btn btn-info" type="submit">
-                                            <i className="fa fa-search"></i> Search
-                                        </button>
-                                    </div>
+                        <div class="col-xl-6 col-lg-5 col-md-6">
+                        <form className="search-header" >
+                            <div className="input-group w-100">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search"
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                />
+                                <div className="input-group-append">
+                                    <button className="btn btn-info" type="submit">
+                                        <i className="fa fa-search"></i> Search
+                                    </button>
                                 </div>
-                            </form>
-                            {/* Hiển thị kết quả tìm kiếm */}
-                            {searchResults.length > 0 && <SearchCategoryResults results={searchResults} />}
-                        </div>
+                            </div>
+                        </form>
+                        {isDropdownOpen && (
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: '100%',
+                                    left: 0,
+                                    zIndex: 100,
+                                    backgroundColor: 'white',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                }}
+                            >
+                                <SearchResults results={searchResults} onLoadMore={handleLoadMore} />
+                            </div>
+                        )}
+
+                    </div>
+
+
                         <div className="col-xl-4 col-lg-4 col-md-6">
                             <div className="widgets-wrap float-md-right">
                                 <div className="widget-header mr-3">
@@ -94,7 +145,11 @@ function Header() {
                                             <i className="fa fa-users"></i>
                                             <span className="notify">1</span>
                                         </div>
-                                        <small className="text"> Login </small>
+                                        {isLoggedIn ? (
+                                            <small className="text">{/* Display username or user-related text */}</small>
+                                        ) : (
+                                            <small className="text"> Login </small>
+                                        )}
                                     </a>
 
                                 </div>

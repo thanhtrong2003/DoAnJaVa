@@ -1,11 +1,12 @@
+// Cart.js
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Cart from "../pages/shopping/Cart";
-
+import { useCart } from "./CartContext";
 const Shopping = () => {
   const location = useLocation();
   const cartItemsFromState = location.state && location.state.cartItems ? location.state.cartItems : [];
-  
+  const { cartState, removeFromCart } = useCart();
   // State để lưu trữ giỏ hàng
   const [cartItems, setCartItems] = useState(cartItemsFromState);
 
@@ -14,7 +15,9 @@ const Shopping = () => {
     const initialCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(initialCartItems);
   }, []);
+
   const handleRemoveFromCart = (productId) => {
+    removeFromCart(productId);
     // Tìm chỉ mục của sản phẩm cần xóa trong mảng cartItems
     const itemIndex = cartItems.findIndex(item => item && item.id === productId);
   
@@ -45,12 +48,18 @@ const Shopping = () => {
     setCartItems(updatedCartItems);
   };
   
-  
-  
+  const handleOrderPlaced = () => {
+    // Xóa giỏ hàng sau khi đặt đơn hàng
+    setCartItems([]);
+    localStorage.removeItem("cartItems");
+    // Hiển thị thông báo đặt hàng thành công
+ 
+  };
+
 
   return (
     <div className="container">
-      <Cart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} onUpdateQuantity={handleUpdateQuantity}  />
+      <Cart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} onUpdateQuantity={handleUpdateQuantity} onOrderPlaced={handleOrderPlaced} />
       {/* ... */}
     </div>
   );

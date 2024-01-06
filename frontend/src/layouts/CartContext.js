@@ -1,4 +1,3 @@
-// CartContext.js
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
 const CartContext = createContext();
@@ -11,12 +10,22 @@ const cartReducer = (state, action) => {
       const updatedCartItems = [...state.cartItems, action.payload.product];
       localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
 
-      const updatedTotalQuantity = state.totalQuantity + 1; // Cập nhật số lượng
+      const updatedTotalQuantity = state.totalQuantity + 1;
 
       return {
         ...state,
         cartItems: updatedCartItems,
         totalQuantity: updatedTotalQuantity,
+      };
+    case 'REMOVE_FROM_CART':
+      const removedItemId = action.payload.productId;
+      const updatedItems = state.cartItems.filter(item => item.id !== removedItemId);
+      localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+
+      return {
+        ...state,
+        cartItems: updatedItems,
+        totalQuantity: state.totalQuantity - 1,
       };
     // Các case khác nếu cần
     default:
@@ -42,8 +51,12 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'ADD_TO_CART', payload: { product } });
   };
 
+  const removeFromCart = (productId) => {
+    dispatch({ type: 'REMOVE_FROM_CART', payload: { productId } });
+  };
+
   return (
-    <CartContext.Provider value={{ cartState: state, addToCart }}>
+    <CartContext.Provider value={{ cartState: state, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );

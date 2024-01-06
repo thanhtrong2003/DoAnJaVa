@@ -1,8 +1,9 @@
+// Cart.js
 import React, { useEffect, useState } from "react";
 import OrderForm from "./OrderForm";
 import "./Cart.css";
 
-const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
+const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) => {
   const [updatedQuantities, setUpdatedQuantities] = useState({});
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -11,9 +12,14 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
     calculateTotalPrice();
   }, [cartItems]);
 
+  useEffect(() => {
+    // Khi state của `updatedQuantities` thay đổi, cập nhật giỏ hàng và tính lại tổng giá
+    calculateTotalPrice();
+  }, [updatedQuantities]);
+
   const handleUpdateQuantity = (productId, quantity) => {
     onUpdateQuantity(productId, quantity);
-    setUpdatedQuantities({ ...updatedQuantities, [productId]: false });
+    setUpdatedQuantities((prevQuantities) => ({ ...prevQuantities, [productId]: false }));
   };
 
   const handleShowOrderForm = () => {
@@ -25,16 +31,15 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
   };
 
   const calculateTotalPrice = () => {
-    // Tính tổng số tiền từ giỏ hàng
     const total = cartItems.reduce((sum, item) => {
       if (item && item.price) {
-        return sum + item.price * item.quantity;
+        return sum + item.price * (updatedQuantities[item.id] || item.quantity);
       }
       return sum;
     }, 0);
     setTotalPrice(total);
   };
-  
+
   return (
     <section className="section-content padding-y">
       <div className="container">
@@ -56,19 +61,25 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
                 </thead>
                 <tbody>
                   {cartItems && cartItems.length > 0 ? (
-                    cartItems.map((item) => (
-                      item && item.thumbnail && (
+                    cartItems.map((item) =>
+                      item && item.thumbnail ? (
                         <tr key={item.id}>
                           <td>
                             <figure className="itemside">
                               <div className="aside">
-                                <img src={`./images/items/${item.thumbnail}`} className="img-sm" alt={item.title} />
+                                <img
+                                  src={`./images/items/${item.thumbnail}`}
+                                  className="img-sm"
+                                  alt={item.title}
+                                />
                               </div>
                               <figcaption className="info">
                                 <a href="#" className="title text-dark">
                                   {item.title}
                                 </a>
-                                <p className="text-muted small">Size: XL, Color: blue, Brand: {item.brand}</p>
+                                <p className="text-muted small">
+                                  Size: XL, Color: blue, Brand: {item.brand}
+                                </p>
                               </figcaption>
                             </figure>
                           </td>
@@ -90,7 +101,12 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
                                   <div className="input-group-append">
                                     <button
                                       className="btn btn-info"
-                                      onClick={() => handleUpdateQuantity(item.id, updatedQuantities[item.id] || item.quantity)}
+                                      onClick={() =>
+                                        handleUpdateQuantity(
+                                          item.id,
+                                          updatedQuantities[item.id] || item.quantity
+                                        )
+                                      }
                                     >
                                       Update
                                     </button>
@@ -106,13 +122,16 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
                             </div>
                           </td>
                           <td className="text-right">
-                            <button className="btn btn-light btn-round" onClick={() => onRemoveFromCart(item.id)}>
+                            <button
+                              className="btn btn-light btn-round"
+                              onClick={() => onRemoveFromCart(item.id)}
+                            >
                               Remove
                             </button>
                           </td>
                         </tr>
-                      )
-                    ))
+                      ) : null
+                    )
                   ) : (
                     <tr>
                       <td colSpan="4">No items in the cart</td>
@@ -122,7 +141,10 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
               </table>
 
               <div className="card-body border-top">
-                <button onClick={handleShowOrderForm} className="btn btn-info float-md-right">
+                <button
+                  onClick={handleShowOrderForm}
+                  className="btn btn-info float-md-right"
+                >
                   Mua hàng <i className="fa fa-chevron-right"></i>
                 </button>
                 <a href="#" className="btn btn-light">
@@ -144,7 +166,12 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
                   <div className="form-group">
                     <label>Have coupon?</label>
                     <div className="input-group">
-                      <input type="text" className="form-control" name="" placeholder="Coupon code" />
+                      <input
+                        type="text"
+                        className="form-control"
+                        name=""
+                        placeholder="Coupon code"
+                      />
                       <span className="input-group-append">
                         <button className="btn btn-info">Apply</button>
                       </span>
@@ -168,7 +195,10 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
                 </dl>
 
                 <p className="text-center mb-3">
-                  <img src={require("../../assets/images/misc/payments.png")} style={{ height: "26" }} />
+                  <img
+                    src={require("../../assets/images/misc/payments.png")}
+                    style={{ height: "26" }}
+                  />
                 </p>
               </div>
             </div>
@@ -182,7 +212,7 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
             <span className="close" onClick={handleCloseOrderForm}>
               &times;
             </span>
-            {showOrderForm && <OrderForm totalPrice={totalPrice} />}
+            {showOrderForm && <OrderForm totalPrice={totalPrice} onOrderPlaced={onOrderPlaced} />}
           </div>
         </div>
       )}
