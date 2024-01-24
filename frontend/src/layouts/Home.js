@@ -30,7 +30,7 @@ function Home() {
             <Slider />
             <CurrentDateTime/>
             <Sale/>
-            <Deal />
+           <Deal />
             <AllProduct />
             <Request />
             {filteredCategories.length > 0 &&
@@ -40,7 +40,7 @@ function Home() {
             <AllProduct />
             <Apparel />
             <AllProduct />
-            <Electronics />
+             <Electronics />
             <Services />
             <Region />
             <Subscribe />

@@ -2,22 +2,23 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
+import { useAuth } from '../../layouts/AuthContext';
 
-const UserLogin = ({ setLoggedIn }) => {
+const UserLogin = () => {
     const [user, setUser] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
+    const { dispatch } = useAuth();
     const handleLogin = async () => {
         try {
             const response = await axios.post('http://localhost:8080/api/users/login', user);
             console.log('Login successful:', response.data);
             // Set the login status to true
-            setLoggedIn(true);
+            dispatch({ type: 'LOGIN', username: user.username });
             // Redirect to the home page after successful login
             navigate('/');
         } catch (error) {
-            console.error('Login failed:', error.response);
+            console.error('Login failed:', error);
             setError('Tên đăng nhập hoặc mật khẩu không chính xác. Hãy thử lại.');
         }
     };
@@ -31,15 +32,22 @@ const UserLogin = ({ setLoggedIn }) => {
             });
             console.log('Server response:', googleResponse.data);
             // Set the login status to true
-            setLoggedIn(true);
+        
             // Redirect to the home page after successful Google login
             navigate('/');
         } catch (error) {
-            console.error('Google login failed:', error.response);
-            setError('Đăng nhập bằng Google thất bại. Hãy thử lại.');
+            console.error('Google login failed:', error);
+            //setError('Đăng nhập bằng Google thất bại. Hãy thử lại.');
         }
     };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: value,
+        }));
+    };
 
     return (
         <div className="container mt-5">
@@ -54,8 +62,9 @@ const UserLogin = ({ setLoggedIn }) => {
                                     <input
                                         type="text"
                                         className="form-control"
+                                        name="username"
                                         value={user.username}
-                                        onChange={(e) => setUser({ ...user, username: e.target.value })}
+                                        onChange={handleChange}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -63,8 +72,9 @@ const UserLogin = ({ setLoggedIn }) => {
                                     <input
                                         type="password"
                                         className="form-control"
+                                        name="password"
                                         value={user.password}
-                                        onChange={(e) => setUser({ ...user, password: e.target.value })}
+                                        onChange={handleChange}
                                     />
                                 </div>
                                 {error && <p className="text-danger">{error}</p>}
@@ -74,12 +84,15 @@ const UserLogin = ({ setLoggedIn }) => {
                                 <div className="mt-3 text-center">
                                     <p>hoặc</p>
                                     <GoogleLogin
-                                        clientId="810882291695-tjjpk133phohjsorsukgupuptbuhmp4k.apps.googleusercontent.com"
+                                        clientId="633459100957-k4q8qjig5lkja13ngbpbmdt28p37hs7e.apps.googleusercontent.com"
                                         buttonText="Đăng nhập với Google"
                                         onSuccess={responseGoogle}
                                         onFailure={responseGoogle}
                                         cookiePolicy={'single_host_origin'}
                                     />
+                                </div>
+                                <div className="mt-3 text-center">
+                                    <p>Nếu bạn chưa có tài khoản, vui lòng <a href="/register">đăng ký</a>.</p>
                                 </div>
                             </form>
                         </div>

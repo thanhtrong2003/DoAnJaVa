@@ -53,8 +53,8 @@ const Items = (category) => {
 
 										</Link>
 									</div>
-									<div class="price h5 mt-2">Giá:{row.price}$</div>
-									<div class="price h5 mt-2">Sale:{row.discount}$</div>
+									<div class="price h5 mt-2">Giá:{row.price}000VND</div>
+									<div class="price h5 mt-2">Sale:{row.discount}000VND</div>
 								</figcaption>
 							</div>
 						</div>

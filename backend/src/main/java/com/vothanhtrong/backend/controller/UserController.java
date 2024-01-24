@@ -1,6 +1,8 @@
 package com.vothanhtrong.backend.controller;
 
 import java.util.List;
+
+
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpHeaders;
@@ -67,11 +69,24 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody UserDto userDto) {
-        User registeredUser = userService.registerUser(userDto);
-        return ResponseEntity.ok(registeredUser);
+    public ResponseEntity<Object> registerUser(@RequestBody UserDto userDto) {
+        try {
+            User registeredUser = userService.registerUser(userDto);
+            return ResponseEntity.ok(registeredUser);
+        } catch (Exception e) {
+            // Log the detailed error message
+            e.printStackTrace(); // You can replace this with your preferred logging mechanism
+    
+            // Customize the error response based on the exception
+            if (e.getMessage() != null && e.getMessage().contains("Username already exists")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Tên đăng nhập đã tồn tại. Vui lòng chọn một tên khác.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đăng ký không thành công. Hãy thử lại.");
+            }
+        }
     }
     
+
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody UserDto userDto) {
         if (userService.loginUser(userDto)) {
@@ -80,7 +95,5 @@ public class UserController {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
     }
-
-
-    
+  
 }

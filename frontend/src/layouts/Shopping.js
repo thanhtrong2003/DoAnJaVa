@@ -53,9 +53,8 @@ const Shopping = () => {
     setCartItems([]);
     localStorage.removeItem("cartItems");
     // Hiển thị thông báo đặt hàng thành công
- 
+    // ...
   };
-
 
   return (
     <div className="container">

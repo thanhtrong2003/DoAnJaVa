@@ -53,18 +53,18 @@ const Deal = () => {
                     <div class="row col-8 no-gutters items-wrap">
                         <div class="col-md col-6" >
                             <figure class="card-product-grid card-sm">
-                                <a href="http://localhost:3000/product-detail" class="img-wrap">
+                                <a href="http://localhost:3000/product-detail?productId=11" class="img-wrap">
                                     <img src={require("../../assets/images/items/3.jpg")} alt="#" />
                                 </a>
                                 <div class="text-wrap p-3">
-                                    <a href="http://localhost:3000/product-detail" class="title">Nước hoa SexyMan</a>
+                                    <a href="http://localhost:3000/product-detail?productId=2" class="title">Nước hoa SexyMan</a>
                                     <span class="badge badge-danger"> -20% </span>
                                 </div>
                             </figure>
                         </div>
                         <div class="col-md col-6">
                             <figure class="card-product-grid card-sm">
-                                <a href="http://localhost:3000/product-detail" class="img-wrap">
+                                <a href="http://localhost:3000/product-detail?productId=3" class="img-wrap">
                                     <img src={require("../../assets/images/items/4.jpg")} alt="#" />
                                 </a>
                                 <div class="text-wrap p-3">

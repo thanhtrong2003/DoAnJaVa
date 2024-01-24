@@ -49,12 +49,12 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) 
               <table className="table table-borderless table-shopping-cart">
                 <thead className="text-muted">
                   <tr className="small text-uppercase">
-                    <th scope="col">Product</th>
+                    <th scope="col">Sản phẩm</th>
                     <th scope="col" width="120">
-                      Quantity
+                      Số lượng
                     </th>
                     <th scope="col" width="120">
-                      Price
+                      Giá
                     </th>
                     <th scope="col" className="text-right" width="200"></th>
                   </tr>
@@ -117,8 +117,8 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) 
                           </td>
                           <td>
                             <div className="price-wrap">
-                              <var className="price">${item.price * item.quantity}</var>
-                              <small className="text-muted"> ${item.price} each </small>
+                              <var className="price">{item.price * item.quantity}000VND</var>
+                              <small className="text-muted"> ${item.price}  </small>
                             </div>
                           </td>
                           <td className="text-right">
@@ -126,7 +126,7 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) 
                               className="btn btn-light btn-round"
                               onClick={() => onRemoveFromCart(item.id)}
                             >
-                              Remove
+                              Xóa
                             </button>
                           </td>
                         </tr>
@@ -134,7 +134,7 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) 
                     )
                   ) : (
                     <tr>
-                      <td colSpan="4">No items in the cart</td>
+                      <td colSpan="4">Không có sản phẩm trong giỏ</td>
                     </tr>
                   )}
                 </tbody>
@@ -147,15 +147,15 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) 
                 >
                   Mua hàng <i className="fa fa-chevron-right"></i>
                 </button>
-                <a href="#" className="btn btn-light">
+                <a href="/ListingGrid" className="btn btn-light">
                   {" "}
-                  <i className="fa fa-chevron-left"></i> Continue shopping{" "}
+                  <i className="fa fa-chevron-left"></i>Tiếp tục mua sắm{" "}
                 </a>
               </div>
             </div>
             <div className="alert alert-success mt-3">
               <p className="icontext">
-                <i className="icon text-success fa fa-truck"></i> Free Delivery within 1-2 weeks
+                <i className="icon text-success fa fa-truck"></i> Miễn phí vẫn chuyển bán kính 5km
               </p>
             </div>
           </main>
@@ -164,16 +164,16 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) 
               <div className="card-body">
                 <form>
                   <div className="form-group">
-                    <label>Have coupon?</label>
+                    <label>Phiếu giảm giá?</label>
                     <div className="input-group">
                       <input
                         type="text"
                         className="form-control"
                         name=""
-                        placeholder="Coupon code"
+                        placeholder="Mã giảm giá"
                       />
                       <span className="input-group-append">
-                        <button className="btn btn-info">Apply</button>
+                        <button className="btn btn-info">Cung cấp</button>
                       </span>
                     </div>
                   </div>
@@ -183,14 +183,14 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onOrderPlaced }) 
             <div className="card">
               <div className="card-body">
                 <dl className="dlist-align">
-                  <dt>Total price:</dt>
-                  <dd className="text-right">${totalPrice}</dd>
+                  <dt>Giá:</dt>
+                  <dd className="text-right">{totalPrice}000VND</dd>
                 </dl>
 
                 <dl className="dlist-align">
-                  <dt>Total:</dt>
+                  <dt>Tổng:</dt>
                   <dd className="text-right h5">
-                    <dd className="text-right">${totalPrice}</dd>
+                    <dd className="text-right">{totalPrice}000VND</dd>
                   </dd>
                 </dl>
 

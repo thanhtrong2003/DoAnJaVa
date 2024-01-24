@@ -37,7 +37,7 @@ const GridContent = () => {
 					<Link
 						className="page-link"
 						to={`?page=${i}&categoryId=${categoryId}`}
-						onClick={(event) => handlePageChange(i, event)}
+						onClick={(event) => handlePageChange(i, event)} 
 					>
 						{i}
 					</Link>

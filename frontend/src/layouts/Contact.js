@@ -1,14 +1,15 @@
 
 
-import PageTop from "../pages/wishlist/PageTop";
-import PageWishlist from "../pages/wishlist/PageWishlist";
+import PageTop from "../pages/contact/PageTop";
+
+import Contact from "../pages/contact/Contact";
 
 
  function wishlist(props){
     return (
         <div className="container">
         <PageTop/>
-        <PageWishlist/>
+        <Contact/>
         </div>
     );
  }

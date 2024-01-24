@@ -142,7 +142,7 @@ const Content = ({ onAddToCart, setCartItems, cartItems }) => {
                                     </small>
                                 </div>
                                 <div class="mb-3">
-                                    <h5 class="title mt-3 text-danger">{product.price}$ </h5>
+                                    <h5 class="title mt-3 text-danger">{product.price}000VND </h5>
                                     {/* <span class="text-muted">USD 562.65 incl. VAT</span> */}
                                 </div>
                                 <p>

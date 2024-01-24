@@ -58,15 +58,22 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public User registerUser(UserDto userDto) {
-        User newUser = new User(userDto.getFullname(), userDto.getUsername(), userDto.getPassword() ,userDto.getEmail() ,userDto.getPhoneNumber() );
+        User existingUser = userRepository.findByUsername(userDto.getUsername());
+        if (existingUser != null) {
+            throw new RuntimeException("Username already exists");
+        }
+    
+        User newUser = new User(userDto.getFullname(), userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhoneNumber());
         return userRepository.save(newUser);
     }
-
+    
+    
     @Override
     public boolean loginUser(UserDto userDto) {
         User userInDb = userRepository.findByUsername(userDto.getUsername());
         return userInDb != null && userInDb.getPassword().equals(userDto.getPassword());
     }
-    
+
+ 
  
 }
